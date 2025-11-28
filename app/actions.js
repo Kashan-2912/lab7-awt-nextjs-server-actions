@@ -157,3 +157,30 @@ export async function getCartTotals() {
     itemCount,
   };
 }
+
+// Dummy checkout function
+export async function checkout() {
+  await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate processing time
+
+  if (cart.length === 0) {
+    return { success: false, message: 'Your cart is empty' };
+  }
+
+  // Generate a dummy order ID
+  const orderId = 'ORD-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+  
+  // Calculate final totals before clearing
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const tax = subtotal * 0.1;
+  const total = subtotal + tax;
+
+  // Clear the cart after successful checkout
+  cart = [];
+
+  return { 
+    success: true, 
+    message: 'Order placed successfully!',
+    orderId,
+    total: total.toFixed(2),
+  };
+}
